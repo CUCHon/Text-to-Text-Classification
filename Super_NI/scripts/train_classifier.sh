@@ -11,7 +11,7 @@ echo "export CUDA_VISIBLE_DEVICES=$gpu"
 
 export CUDA_VISIBLE_DEVICES=${gpu}
 export CUDA_DEVICE_ORDER="PCI_BUS_ID"
-export TRANSFORMERS_CACHE=/scratch/rml6079/.cache/huggingface
+export TRANSFORMERS_CACHE=/aul/homes/hzhen011/Text-to-Text-Classification/Super_NI/scratch/rml6079/.cache/huggingface
 export CUDA_LAUNCH_BLOCKING="1"
 
 port=$(shuf -i25000-30000 -n1)
@@ -29,10 +29,10 @@ fi
 data_dir=data/splits/default
 task_dir=data/tasks/add_output_space
 output_dir=output_classifier/${model}-mix_gen_${train_mix_gen}
-Tk_instruct_cache_dir=/scratch/rml6079/project/Tk-Instruct/cache/
+Tk_instruct_cache_dir=/aul/homes/hzhen011/Text-to-Text-Classification/Super_NI/scratch/rml6079/project/Tk-Instruct/cache/
 lr_proj=3e-3
 
-deepspeed --master_port $port src/run_classifier.py \
+python src/run_classifier.py \
     --do_train \
     --do_predict \
     --predict_with_generate \
@@ -66,7 +66,6 @@ deepspeed --master_port $port src/run_classifier.py \
     --evaluation_strategy epoch \
     --save_strategy no \
     --save_steps 2500 \
-    --deepspeed ds_configs/stage2.config \
     --bf16 \
     --run_name train_classifier-mix_gen_${train_mix_gen} \
     --seed 42 \
